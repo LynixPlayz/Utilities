@@ -287,4 +287,4 @@ async def on_command_error(ctx, error):
     print(f"An error occured: {str(error)}")
 
 
-bot.run("ODI4MDc0ODg0MzY5NjEyODMx.YGkS1Q.U38Vi3a1Ivrl6alkbgTHV0z85MQ")
+bot.run(bottoken)
