@@ -1,7 +1,7 @@
 
 import discord
 import random
-
+import os
 from discord.ext import commands
 
 
@@ -287,4 +287,4 @@ async def on_command_error(ctx, error):
     print(f"An error occured: {str(error)}")
 
 
-bot.run(bottoken)
+bot.run(os.environ['bottoken'])
