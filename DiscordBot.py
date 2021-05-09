@@ -1,8 +1,9 @@
 
 import discord
 import random
-import os
+
 from discord.ext import commands
+from discord.utils import get
 
 
 bot = commands.Bot(command_prefix="c.")
@@ -16,7 +17,7 @@ async def on_ready():
     print("connected and ready to use")
 @bot.command(pass_context=True)
 async def cmds(ctx):
-    await ctx.send('''c. is the prefix\n\nscript - reads bee movie script\nbee - puts a random bee movie character on screen\na - put a question after a and it will answer | usage c.a <question>\njoin - joins your voice channel\nrename - renames the target | usage c.rename <user> <new name>''')
+    await ctx.send('''NOT UPDATED\n\n\n\n\n\nc. is the prefix\n\nscript - reads bee movie script\nbee - puts a random bee movie character on screen\na - put a question after a and it will answer | usage c.a <question>\njoin - joins your voice channel\nrename - renames the target | usage c.rename <user> <new name>''')
 
 
 @bot.command(pass_context=True)
@@ -28,20 +29,92 @@ async def read (ctx, *, arg):
 
 bot.voting_enabled = False
 
-@bot.command()
-async def pollstart():
-    bot.voting_enabled = True
+pollmessage = ''
 
 @bot.command()
-async def pollfinish():
+async def pollstart(ctx, arg1, arg2, arg3, arg4, *, arg5):
+    bot.pollvoting_enabled = True
+    global pollmessage
+    pollmessage = await ctx.send('Question:  ' + arg5 + '?\n' + '1 = ' + arg1 + '\n2 = ' + arg2 + '\n3 = ' + arg3 + '\n4 = ' + arg4)
+    await pollmessage.add_reaction('1️⃣')
+    await pollmessage.add_reaction('2️⃣')
+    await pollmessage.add_reaction('3️⃣')
+    await pollmessage.add_reaction('4️⃣')
+
+@bot.event
+async def on_reaction_add(reaction, user):
+    pass
+
+        
+
+
+
+
+onereaction = 0
+
+tworeaction = 0
+
+threereaction = 0
+
+fourreaction = 0
+
+
+@bot.event
+async def on_raw_reaction_add(payload):
+    if payload.emoji.name == "1️⃣":
+        channel = bot.get_channel(payload.channel_id)
+        message = await channel.fetch_message(payload.message_id)
+        reaction = get(message.reactions, emoji=payload.emoji.name)
+        if reaction and reaction.count > 1:
+            global onereaction
+            onereaction = reaction.count - 1
+    if payload.emoji.name == "2️⃣":
+        channel = bot.get_channel(payload.channel_id)
+        message = await channel.fetch_message(payload.message_id)
+        reaction = get(message.reactions, emoji=payload.emoji.name)
+        if reaction and reaction.count > 1:
+            global tworeaction
+            tworeaction = reaction.count - 1
+    if payload.emoji.name == "3️⃣":
+        channel = bot.get_channel(payload.channel_id)
+        message = await channel.fetch_message(payload.message_id)
+        reaction = get(message.reactions, emoji=payload.emoji.name)
+        if reaction and reaction.count > 1:
+            global threereaction
+            threereaction = reaction.count - 1
+    if payload.emoji.name == "4️⃣":
+        channel = bot.get_channel(payload.channel_id)
+        message = await channel.fetch_message(payload.message_id)
+        reaction = get(message.reactions, emoji=payload.emoji.name)
+        if reaction and reaction.count > 1:
+            global fourreaction
+            fourreaction = reaction.count - 1
+
+pollwinner = ''
+
+@bot.command()
+async def pollend(ctx):
     bot.voting_enabled = False
+    pollwinner = 'Nobody, Its a tie!'
+    if onereaction > tworeaction and threereaction and fourreaction:
+        pollwinner = '1'
+    elif tworeaction > onereaction and threereaction and fourreaction:
+        pollwinner = '2'
+    elif threereaction > onereaction and tworeaction and fourreaction:
+        pollwinner = '3'
+    elif fourreaction > onereaction and tworeaction and threereaction:
+        pollwinner = '4'
+
+
+    await ctx.send(str(onereaction) + 'vote(s) for 1\n' + str(tworeaction) + 'vote(s) for 2\n' + str(threereaction) + 'vote(s) for 3\n' + str(fourreaction) + 'vote(s) for 4\nand the winner is... ' + str(pollwinner))
+
 
 @bot.command()
-async def pollvote(ctx):
+async def pollstatus(ctx):
     if bot.voting_enabled:
         await ctx.send('enabled')
     else:
-        await ctx.send('not enabled')
+        await ctx.send('not enabled wait until later')
 @bot.command()
 async def join(ctx):
     channel = ctx.author.voice.channel
@@ -52,9 +125,10 @@ async def join(ctx):
 async def updates(ctx):
     await ctx.send('all updates https://ExpertEssentialMegabyte.harrypotter10.repl.co')
 
+
 @bot.command()
-async def pollevent(ctx, *, answers):
-    await ctx.send('starting...')
+async def pollresults(ctx):
+    await ctx.send('---')
 
 @bot.command()
 async def rename(ctx, user: discord.Member, *,newName = ""):
@@ -287,4 +361,4 @@ async def on_command_error(ctx, error):
     print(f"An error occured: {str(error)}")
 
 
-bot.run(os.environ['bottoken'])
+bot.run("ODI4MDc0ODg0MzY5NjEyODMx.YGkS1Q.an-8A0SRE2tNP36rc2xrUGiCVUQ")
