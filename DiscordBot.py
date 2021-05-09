@@ -1,6 +1,7 @@
 
 import discord
 import random
+import os
 
 from discord.ext import commands
 from discord.utils import get
@@ -360,5 +361,4 @@ async def a (ctx):
 async def on_command_error(ctx, error):
     print(f"An error occured: {str(error)}")
 
-
-bot.run("ODI4MDc0ODg0MzY5NjEyODMx.YGkS1Q.an-8A0SRE2tNP36rc2xrUGiCVUQ")
+bot.run(os.environ['bottoken'])
